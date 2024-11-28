@@ -37,18 +37,18 @@ export class InterfazClienteComponent {
   actualizarTotal(event: Event) {
     const input = event.target as HTMLInputElement;
     const cantidad = parseInt(input.value, 10);
-    const precioUnitario = 1500000; // Precio del televisor
+    const precioUnitario = 250; // Precio del televisor
     this.totalGeneral = cantidad * precioUnitario;
+    
   }
 
-  // Método para procesar el pago
   async procesarPago() {
     const idOrden = 1; // Debes obtener esto desde tu contexto
     const metodoPago = parseInt((document.getElementById('metodoPago') as HTMLSelectElement).value, 10);
   
     const datosPago = {
       id_orden: idOrden,
-      monto_pago: this.totalGeneral,
+      monto_pago: this.totalGeneral, // Verifica este valor
       id_metodo_pago: metodoPago
     };
   
@@ -60,6 +60,7 @@ export class InterfazClienteComponent {
       alert('Hubo un error al procesar el pago');
     }
   }
+  
   async manejarDevolucion(ordenId: number) {
     const motivoDevolucion = (document.getElementById(`motivo-devolucion-${ordenId}`) as HTMLTextAreaElement).value;
   

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PagosService {
-  private apiUrl = 'http://localhost:3000/api/pagos'; // Cambia por la URL real de tu backend
+  private apiUrl = 'http://localhost:3000/api'; // Cambia por la URL real de tu backend
 
   constructor(private http: HttpClient) {}
 
