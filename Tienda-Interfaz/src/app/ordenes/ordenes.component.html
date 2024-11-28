@@ -1,1 +1,84 @@
-<p>ordenes works!</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - Ordenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+     <!-- Header -->
+     <header class="d-flex justify-content-between align-items-center p-3 bg-gradient">
+        <div>
+            <a routerLink="/reportes" class="text-white me-3">Reportes</a>
+            <a routerLink="/inventario" class="text-white me-3">Inventario</a>
+            <a routerLink="/ordenes" class="text-white">Ordenes</a>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="text-white me-2">Admin</span>
+            <img src="https://via.placeholder.com/40" alt="Imagen de Usuario" class="img-fluid rounded-circle">
+        </div>
+    </header>
+    <div class="search-container">
+        <input
+          type="number"
+          [(ngModel)]="searchOrderId"
+          placeholder="Buscar ID de orden"
+        />
+        <button (click)="searchOrderHistory()">Buscar</button>
+      </div>
+      
+      <table class = "orders-table">
+        <thead>
+          <tr>
+            <th>ID Orden</th>
+            <th>Fecha Orden</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Cliente</th>
+            <th>Email Cliente</th>
+            <th>Hacer Envío</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <td>{{ order.id_orden }}</td>
+            <td>{{ order.fecha_orden }}</td>
+            <td>{{ order.estado }}</td>
+            <td>{{ order.total }}</td>
+            <td>{{ order.nombre_cliente }}</td>
+            <td>{{ order.email_cliente }}</td>
+            <td>
+              <button (click)="sendOrder(order.id_orden)" class="btn btn-primary">
+                Enviar Orden
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p *ngIf="orders.length === 0">No hay órdenes pendientes de envío.</p>
+      
+      <h3>Historial de la Orden</h3>
+      <table class="history-table" *ngIf="orderHistory.length > 0">
+        <thead>
+          <tr>
+            <th>ID Historial</th>
+            <th>Estado</th>
+            <th>Fecha de Cambio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let history of orderHistory">
+            <td>{{ history.id_historial }}</td>
+            <td>{{ history.estado_orden }}</td>
+            <td>{{ history.fecha_cambio }}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      
+      
+</body>
+</html>
+
