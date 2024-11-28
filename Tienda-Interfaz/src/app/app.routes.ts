@@ -6,6 +6,7 @@ import { OrdenesComponent } from './ordenes/ordenes.component';
 
 export const routes: Routes = [
     { path: '', component: AdminComponent },
+    { path: 'admin', component: AdminComponent },
     { path: 'reportes', component: ReportesComponent },
     { path: 'inventario', component: InventarioComponent },
     { path: 'ordenes', component: OrdenesComponent },

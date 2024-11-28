@@ -9,7 +9,15 @@ export class OrdenesService {
   private baseUrl = 'http://localhost:3000/api'; // Cambia al URL de tu backend
 
   constructor(private http: HttpClient) {}
-
+  // Crear una nueva orden
+  crearOrden(orden: {
+    fecha_orden: string;
+    total: number;
+    id_cliente: number;
+    detalles: { id_producto: number; cantidad: number; precio_unitario: number }[];
+  }): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, orden);
+  }
   // Obtener todas las órdenes
   getOrders(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/orders`);
