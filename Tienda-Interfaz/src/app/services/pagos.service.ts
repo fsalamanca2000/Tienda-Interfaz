@@ -11,8 +11,8 @@ export class PagosService {
   constructor(private http: HttpClient) {}
 
   // Procesar un pago
-  procesarPago(pago: { id_orden: number; monto_pago: number; id_metodo_pago: number }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/procesar-pago`, pago);
+  procesarPago(datosPago: { id_orden: number, monto_pago: number, id_metodo_pago: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/procesar-pago`, datosPago);
   }
 
   // Obtener la lista de pagos

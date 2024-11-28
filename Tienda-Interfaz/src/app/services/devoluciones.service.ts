@@ -11,12 +11,8 @@ export class DevolucionesService {
   constructor(private http: HttpClient) {}
 
   // Registrar una devolución
-  registrarDevolucion(devolucion: {
-    id_orden: number;
-    motivo: string;
-    fecha: string;
-  }): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, devolucion);
+  registrarDevolucion(datosDevolucion: { id_orden: number, motivo_devolucion: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/registrar-devolucion`, datosDevolucion);
   }
 
   // Obtener lista de devoluciones

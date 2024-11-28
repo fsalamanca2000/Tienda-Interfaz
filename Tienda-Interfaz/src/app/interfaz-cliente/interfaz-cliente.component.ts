@@ -1,111 +1,30 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PagosService } from '../services/pagos.service';
 import { OrdenesService } from '../services/ordenes.service';
 import { DevolucionesService } from '../services/devoluciones.service';
-import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-interfaz-cliente',
+  standalone: true,
   templateUrl: './interfaz-cliente.component.html',
   styleUrls: ['./interfaz-cliente.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, FormsModule]
 })
 export class InterfazClienteComponent {
-  // Variables para manejar datos de los servicios
-  pagos: any[] = []; // Lista de pagos
-  ordenes: any[] = []; // Lista de órdenes
-  devoluciones: any[] = []; // Lista de devoluciones
-  mensaje: string = ''; // Mensaje de estado o error
+  vistaActiva: string = 'pagos'; // Estado de la vista activa
+  totalGeneral: number = 0; // Total a pagar
+  formularioVisible: { [key: number]: boolean } = {};
+  motivoDevolucion: { [key: number]: string } = {};
 
   constructor(
-    private pagosService: PagosService,
-    private ordenService: OrdenesService,
+    private pagoService: PagosService,
+    private ordenesService: OrdenesService,
     private devolucionesService: DevolucionesService
   ) {}
 
-  // Métodos para interactuar con los servicios
-
-  // PAGOS
-  obtenerPagos() {
-    this.pagosService.obtenerPagos().subscribe(
-      (data) => {
-        this.pagos = data.pagos;
-      },
-      (error) => {
-        this.mensaje = 'Error al obtener pagos: ' + error.message;
-        console.error(error);
-      }
-    );
-  }
-
-  procesarPago(nuevoPago: any) {
-    this.pagosService.procesarPago(nuevoPago).subscribe(
-      (response) => {
-        this.mensaje = 'Pago procesado con éxito: ' + response.id_pago;
-        this.obtenerPagos(); // Refresca la lista de pagos
-      },
-      (error) => {
-        this.mensaje = 'Error al procesar el pago: ' + error.message;
-        console.error(error);
-      }
-    );
-  }
-
-  // ÓRDENES
-  obtenerOrdenes() {
-    this.ordenService.obtenerOrdenes().subscribe(
-      (data) => {
-        this.ordenes = data.ordenes;
-      },
-      (error) => {
-        this.mensaje = 'Error al obtener órdenes: ' + error.message;
-        console.error(error);
-      }
-    );
-  }
-
-  crearOrden(nuevaOrden: any) {
-    this.ordenService.crearOrden(nuevaOrden).subscribe(
-      (response) => {
-        this.mensaje = 'Orden creada con éxito: ' + response.ordenId;
-        this.obtenerOrdenes(); // Refresca la lista de órdenes
-      },
-      (error) => {
-        this.mensaje = 'Error al crear la orden: ' + error.message;
-        console.error(error);
-      }
-    );
-  }
-
-  // DEVOLUCIONES
-  obtenerDevoluciones() {
-    this.devolucionesService.obtenerDevoluciones().subscribe(
-      (data) => {
-        this.devoluciones = data.devoluciones;
-      },
-      (error) => {
-        this.mensaje = 'Error al obtener devoluciones: ' + error.message;
-        console.error(error);
-      }
-    );
-  }
-
-  crearDevolucion(nuevaDevolucion: any) {
-    this.devolucionesService.registrarDevolucion(nuevaDevolucion).subscribe(
-      (response) => {
-        this.mensaje = 'Devolución creada con éxito: ' + response.id_devolucion;
-        this.obtenerDevoluciones(); // Refresca la lista de devoluciones
-      },
-      (error) => {
-        this.mensaje = 'Error al crear la devolución: ' + error.message;
-        console.error(error);
-      }
-    );
-  }
-  vistaActiva: string = 'pagos';
-
-  // Métodos para cambiar la vista
+  // Método para cambiar entre vistas
   mostrarPagos() {
     this.vistaActiva = 'pagos';
   }
@@ -113,17 +32,55 @@ export class InterfazClienteComponent {
   mostrarDevoluciones() {
     this.vistaActiva = 'devoluciones';
   }
-  precioUnitario: number = 1500000; // Precio unitario del televisor
-  totalGeneral: number = this.precioUnitario; // Total inicial con cantidad 1
 
-  // Función para actualizar el total cuando se cambia la cantidad
-  actualizarTotal(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement) {
-      const cantidad = inputElement.valueAsNumber;
-      if (!isNaN(cantidad) && cantidad >= 1) {
-        this.totalGeneral = this.precioUnitario * cantidad;
-      }
+  // Método para actualizar el total de la compra
+  actualizarTotal(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const cantidad = parseInt(input.value, 10);
+    const precioUnitario = 1500000; // Precio del televisor
+    this.totalGeneral = cantidad * precioUnitario;
+  }
+
+  // Método para procesar el pago
+  async procesarPago() {
+    const idOrden = 1; // Debes obtener esto desde tu contexto
+    const metodoPago = parseInt((document.getElementById('metodoPago') as HTMLSelectElement).value, 10);
+  
+    const datosPago = {
+      id_orden: idOrden,
+      monto_pago: this.totalGeneral,
+      id_metodo_pago: metodoPago
+    };
+  
+    try {
+      const response = await this.pagoService.procesarPago(datosPago).toPromise();
+      alert('Pago procesado correctamente');
+    } catch (error) {
+      console.error('Error al procesar el pago:', error);
+      alert('Hubo un error al procesar el pago');
     }
+  }
+  async manejarDevolucion(ordenId: number) {
+    const motivoDevolucion = (document.getElementById(`motivo-devolucion-${ordenId}`) as HTMLTextAreaElement).value;
+  
+    if (motivoDevolucion.trim() !== '') {
+      const datosDevolucion = {
+        id_orden: ordenId,
+        motivo_devolucion: motivoDevolucion
+      };
+  
+      try {
+        const response = await this.devolucionesService.registrarDevolucion(datosDevolucion).toPromise();
+        alert('Devolución procesada correctamente');
+      } catch (error) {
+        console.error('Error al registrar la devolución:', error);
+        alert('Hubo un error al registrar la devolución');
+      }
+    } else {
+      alert('Por favor, escribe el motivo de la devolución');
+    }
+  }
+  mostrarFormularioDevolucion(ordenId: number): void {
+    this.formularioVisible[ordenId] = true;
   }
 }
