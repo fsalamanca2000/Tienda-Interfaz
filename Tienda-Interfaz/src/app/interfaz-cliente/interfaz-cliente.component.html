@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./interfaz-cliente.component.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center p-3 bg-gradient">
+        <div>
+            <a href="#" (click)="mostrarPagos()" class="text-white me-3">Pagos</a>
+            <a href="#" (click)="mostrarDevoluciones()" class="text-white">Devoluciones</a>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="text-white me-2">Mi cuenta</span>
+            <img src="/usuario.png" alt="Imagen de Usuario" class="img-fluid rounded-circle"
+                style="width: 40px; height: 40px;">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Contenido de Pagos -->
+        <div *ngIf="vistaActiva === 'pagos'" class="row">
+            <!-- Lista de Productos -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-gradient text-white">
+                        <h5 class="mb-0">Lista de Productos</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Nombre:</strong> Televisor Samsung 40" Full HD TS290<br>
+                                        <strong>Precio Unitario:</strong> $1.500.000
+                                    </div>
+                                    <form>
+                                        <input type="number" min="1" value="1" class="form-control w-25"
+                                            (input)="actualizarTotal($event)">
+                                    </form>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Método de Pago -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-gradient text-white">
+                        <h5 class="mb-0">Método de Pago</h5>
+                    </div>
+                    <div class="card-body">
+                        <form class="container mt-4">
+                            <!-- Menú desplegable de métodos de pago -->
+                            <div class="mb-3">
+                                <label for="metodoPago" class="form-label">Método de Pago:</label>
+                                <select id="metodoPago" name="metodoPago" class="form-select">
+                                    <option value="1">Tarjeta de Crédito</option>
+                                    <option value="2">Paypal</option>
+                                    <option value="3">Transferencia Bancaria</option>
+                                    <option value="4">Efectivo</option>
+                                    <option value="5">Crédito de Tienda</option>
+                                </select>
+                            </div>
+
+                            <!-- Campo de número de tarjeta -->
+                            <div class="mb-3">
+                                <label for="numeroTarjeta" class="form-label">Número de Tarjeta:</label>
+                                <input type="text" id="numeroTarjeta" name="numeroTarjeta" class="form-control"
+                                    value="1234 5678 9876 5432" readonly>
+                            </div>
+
+                            <!-- Campo de fecha de vencimiento -->
+                            <div class="mb-3">
+                                <label for="fechaVencimiento" class="form-label">Fecha de Vencimiento:</label>
+                                <input type="text" id="fechaVencimiento" name="fechaVencimiento" class="form-control"
+                                    value="12/25" readonly>
+                            </div>
+
+                            <!-- Campo de CCV -->
+                            <div class="mb-3">
+                                <label for="ccv" class="form-label">CCV:</label>
+                                <input type="text" id="ccv" name="ccv" class="form-control" value="123" readonly>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <strong>Total a Pagar: ${{ totalGeneral | number }}</strong>
+                                <button type="submit" class="btn btn-primary bg-gradient">Pagar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de Devoluciones -->
+        <div *ngIf="vistaActiva === 'devoluciones'">
+            <div id="devoluciones-container">
+                <h2>Historial de Órdenes</h2>
+
+                <!-- Contenedor para mostrar órdenes -->
+                <div id="ordenes-list">
+                    <!-- Ejemplo de una orden cargada dinámicamente -->
+                    <div class="orden-card" id="orden-1">
+                        <h3>Orden ID: 1</h3>
+                        <p><strong>Cliente:</strong> 1</p>
+                        <p><strong>Total:</strong> ${{ totalGeneral | number }}</p>
+                        <p><strong>Fecha:</strong> 2024-11-28</p>
+
+                        <!-- Botón para activar formulario de devolución -->
+                        <button class="btn btn-danger" onclick="mostrarFormularioDevolucion(1)">Devolver</button>
+
+                        <!-- Formulario de devolución (inicialmente oculto) -->
+                        <div class="devolucion-form" id="devolucion-form-1" style="display: none;">
+                            <textarea id="motivo-devolucion-1"
+                                placeholder="Escribe el motivo de la devolución"></textarea>
+                            <button class="btn btn-primary" onclick="registrarDevolucion(1)">
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Agregar más órdenes aquí -->
+                </div>
+
+                <!-- Mensaje cuando no hay órdenes (se gestiona con JavaScript) -->
+                <div id="no-ordenes" style="display: none;">
+                    <p>No hay órdenes registradas para el cliente.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Simulación de la función de actualización del total.
+        function actualizarTotal(cantidad) {
+            const precioUnitario = 1500000; // Precio del televisor
+            const totalGeneralElement = document.getElementById('totalGeneral');
+
+            // Calcula el total general
+            const totalGeneral = precioUnitario * cantidad;
+            totalGeneralElement.innerText = totalGeneral.toLocaleString();
+        }
+        document.getElementById('btnPagar').addEventListener('click', async function () {
+            // Capturar los datos del formulario
+            const metodoPago = document.getElementById('metodoPago').value;
+            const numeroTarjeta = document.getElementById('numeroTarjeta').value;
+            const fechaVencimiento = document.getElementById('fechaVencimiento').value;
+            const ccv = document.getElementById('ccv').value;
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+            const precioUnitario = parseFloat(document.getElementById('precioUnitario').value);
+
+            // Calcular el total
+            const totalGeneral = cantidad * precioUnitario;
+
+            // Preparar los datos para la orden
+            const orderData = {
+                fecha_orden: new Date().toISOString(),
+                total: totalGeneral,
+                id_cliente: 1, // Cambiar por el id del cliente real
+                detalles: [
+                    {
+                        id_producto: 1, // Cambiar por el id del producto real
+                        cantidad: cantidad,
+                        precio_unitario: precioUnitario
+                    }
+                ]
+            };
+
+            try {
+                // Primera solicitud: Crear la orden
+                const orderResponse = await fetch('/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const orderResult = await orderResponse.json();
+
+                if (orderResponse.ok) {
+                    console.log('Orden creada:', orderResult);
+
+                    // Segunda solicitud: Procesar el pago
+                    const paymentData = {
+                        id_orden: orderResult.ordenId,
+                        monto_pago: totalGeneral,
+                        id_metodo_pago: parseInt(metodoPago)
+                    };
+
+                    const paymentResponse = await fetch('/procesar-pago', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(paymentData)
+                    });
+
+                    const paymentResult = await paymentResponse.json();
+
+                    if (paymentResponse.ok) {
+                        console.log('Pago procesado:', paymentResult);
+                        alert('El pago se ha realizado con éxito.');
+                    } else {
+                        console.error('Error al procesar el pago:', paymentResult);
+                        alert('Hubo un error al procesar el pago.');
+                    }
+                } else {
+                    console.error('Error al crear la orden:', orderResult);
+                    alert('Hubo un error al crear la orden.');
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                alert('Error de conexión. Intenta de nuevo.');
+            }
+        });
+        // Simular datos de órdenes
+        const ordenes = [
+            { id_orden: 1, nombre_cliente: "Juan Pérez", total: 50.0, fecha_orden: "2024-11-28" },
+            { id_orden: 2, nombre_cliente: "Ana Gómez", total: 120.0, fecha_orden: "2024-11-27" },
+        ];
+
+        // Función para mostrar órdenes dinámicamente
+        function cargarOrdenes() {
+            const ordenesList = document.getElementById("ordenes-list");
+            const noOrdenes = document.getElementById("no-ordenes");
+
+            if (ordenes.length === 0) {
+                noOrdenes.style.display = "block";
+                ordenesList.innerHTML = ""; // Limpiar el contenedor
+                return;
+            }
+
+            noOrdenes.style.display = "none";
+            ordenesList.innerHTML = ""; // Limpiar el contenedor
+
+            ordenes.forEach((orden) => {
+                const ordenCard = document.createElement("div");
+                ordenCard.className = "orden-card";
+                ordenCard.id = `orden-${orden.id_orden}`;
+                ordenCard.innerHTML = `
+      <h3>Orden ID: ${orden.id_orden}</h3>
+      <p><strong>Cliente:</strong> ${orden.nombre_cliente}</p>
+      <p><strong>Total:</strong> $${orden.total.toFixed(2)}</p>
+      <p><strong>Fecha:</strong> ${orden.fecha_orden}</p>
+      <button class="btn btn-danger" onclick="mostrarFormularioDevolucion(${orden.id_orden})">Devolver</button>
+      <div class="devolucion-form" id="devolucion-form-${orden.id_orden}" style="display: none;">
+        <textarea id="motivo-devolucion-${orden.id_orden}" placeholder="Escribe el motivo de la devolución"></textarea>
+        <button class="btn btn-primary" onclick="registrarDevolucion(${orden.id_orden})">Confirmar</button>
+      </div>
+    `;
+                ordenesList.appendChild(ordenCard);
+            });
+        }
+
+        // Mostrar formulario de devolución
+        function mostrarFormularioDevolucion(idOrden) {
+            const form = document.getElementById(`devolucion-form-${idOrden}`);
+            const isVisible = form.style.display === "block";
+            form.style.display = isVisible ? "none" : "block"; // Alternar visibilidad
+        }
+
+        // Registrar devolución
+        function registrarDevolucion(idOrden) {
+            const motivo = document.getElementById(`motivo-devolucion-${idOrden}`).value.trim();
+
+            if (!motivo) {
+                alert("Debe ingresar un motivo de devolución.");
+                return;
+            }
+
+            // Simular envío al servidor
+            console.log("Registrando devolución:", {
+                id_orden: idOrden,
+                motivo_devolucion: motivo,
+            });
+
+            alert("Devolución registrada con éxito.");
+            // Aquí podrías actualizar la interfaz o eliminar la orden devuelta
+        }
+
+        // Cargar las órdenes al iniciar la página
+        cargarOrdenes();
+
+    </script>
+</body>
+
+</html>
