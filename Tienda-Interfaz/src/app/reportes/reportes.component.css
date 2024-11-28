@@ -1,0 +1,108 @@
+/* Estilo general */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Gradiente del header */
+.bg-gradient {
+    background: linear-gradient(45deg, #216AD8, #FF416C) !important;
+}
+
+/* Estilo de enlaces en el header */
+header a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+header a:hover {
+    text-decoration: underline;
+    color: #FFC107;
+}
+
+/* Estilo del mensaje de bienvenida */
+.welcome-message {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #343A40;
+    margin-bottom: 1rem;
+}
+
+/* Estilo del texto informativo */
+.info-text {
+    font-size: 1.2rem;
+    color: #6C757D;
+}
+
+/* Estilos generales para las tablas */
+.table {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-collapse: collapse; /* Elimina los espacios entre las celdas */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Estilo para celdas de la tabla */
+.table th,
+.table td {
+    padding: 12px 15px; /* Espaciado interno de las celdas */
+    text-align: left;
+    vertical-align: middle; /* Alineación vertical */
+    font-size: 14px; /* Fuente más pequeña para un diseño más limpio */
+}
+
+/* Fondo del encabezado de la tabla con gradiente */
+.table thead {
+    background: linear-gradient(45deg, #216AD8, #FF416C); /* Gradiente en todo el encabezado */
+    color: #fff; /* Texto blanco */
+    font-weight: 600;
+}
+
+/* Filas con fondo claro */
+.table td {
+    background-color: #f9f9f9; /* Fondo suave para las celdas */
+    border: 1px solid #ddd; /* Bordes sutiles */
+}
+
+/* Efecto de hover en las filas */
+.table tbody tr:hover {
+    background-color: #f1f1f1; /* Color suave al pasar el ratón */
+}
+
+/* Tabla responsive */
+.table-responsive {
+    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es demasiado ancha */
+}
+
+/* Estilos para las alertas de error */
+.alert-danger {
+    background-color: #f8d7da; /* Fondo rojo claro */
+    color: #721c24; /* Texto rojo oscuro */
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* Estilo de los títulos */
+h1, h2 {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    font-weight: 700;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+/* Bordes redondeados para la tabla */
+.table, .table th, .table td {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Estilo de las celdas vacías */
+.table td.empty-cell {
+    color: #ccc;
+    text-align: center;
+}

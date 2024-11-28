@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Tienda - Reportes</title>
+</head>
+<body>
+     <!-- Header -->
+     <header class="d-flex justify-content-between align-items-center p-3 bg-gradient">
+        <div>
+            <a routerLink="/reportes" class="text-white me-3">Reportes</a>
+            <a routerLink="/inventario" class="text-white me-3">Inventario</a>
+            <a routerLink="/ordenes" class="text-white">Ordenes</a>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="text-white me-2">Admin</span>
+            <img src="https://via.placeholder.com/40" alt="Imagen de Usuario" class="img-fluid rounded-circle">
+        </div>
+    </header>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Reportes</h1>
+        
+        <!-- Tabla de Devoluciones -->
+        <section class="mb-5">
+            <h2 class="mb-3">Devoluciones</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Devolución</th>
+                            <th>ID Orden</th>
+                            <th>Fecha Devolución</th>
+                            <th>Motivo</th>
+                            <th>Fecha Orden</th>
+                            <th>Total Orden</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let devolucion of devoluciones">
+                            <td>{{ devolucion.id_devolucion }}</td>
+                            <td>{{ devolucion.id_orden }}</td>
+                            <td>{{ devolucion.fecha_devolucion }}</td>
+                            <td>{{ devolucion.motivo }}</td>
+                            <td>{{ devolucion.fecha_orden }}</td>
+                            <td>{{ devolucion.total_orden | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    
+        <!-- Tabla de Envíos -->
+        <section class="mb-5">
+            <h2 class="mb-3">Reporte de Envíos</h2>
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Envío</th>
+                            <th>ID Orden</th>
+                            <th>Estado Envío</th>
+                            <th>Fecha Envío</th>
+                            <th>Fecha Entrega</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let envio of envios">
+                            <td>{{ envio.id_envio }}</td>
+                            <td>{{ envio.id_orden }}</td>
+                            <td>{{ envio.estado_envio }}</td>
+                            <td>{{ envio.fecha_envio | date:'dd/MM/yyyy' }}</td>
+                            <td>{{ envio.fecha_entrega | date:'dd/MM/yyyy' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    
+        <!-- Tabla de Reporte de Ventas -->
+        <section>
+            <h2 class="mb-3">Reporte de Ventas</h2>
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Orden ID</th>
+                            <th>Fecha Orden</th>
+                            <th>Estado</th>
+                            <th>Total Orden</th>
+                            <th>Nombre Cliente</th>
+                            <th>Email Cliente</th>
+                            <th>Método de Pago</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Total Producto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let venta of reporteVentas">
+                            <td>{{ venta.id_orden }}</td>
+                            <td>{{ venta.fecha_orden | date:'dd/MM/yyyy' }}</td>
+                            <td>{{ venta.estado }}</td>
+                            <td>{{ venta.total_orden | currency }}</td>
+                            <td>{{ venta.nombre_cliente }}</td>
+                            <td>{{ venta.email_cliente }}</td>
+                            <td>{{ venta.metodo_pago }}</td>
+                            <td>{{ venta.nombre_producto }}</td>
+                            <td>{{ venta.cantidad }}</td>
+                            <td>{{ venta.precio_unitario | currency }}</td>
+                            <td>{{ venta.total_producto | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    
+</body>
+</html>
